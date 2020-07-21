@@ -22,6 +22,9 @@ import networkSvc from '../services/networkSvc';
 import tempFileSvc from '../services/tempFileSvc';
 import store from '../store';
 import './common/vueGlobals';
+import 'js-cookie'
+import axios from 'axios'
+import config from '../config/index'
 
 const themeClasses = {
   light: ['app--light'],
@@ -49,6 +52,11 @@ export default {
     close() {
       tempFileSvc.close();
     },
+    async getUserInfo(){
+      let userToken = Cookies.get('user_token')
+      const userInfo = await axios.get(`${config.baseUrl}${config.api.getUserInfo}/${userToken}`)
+      store.dispatch("saveUserInfo",userInfo)
+    }
   },
   async created() {
     try {
