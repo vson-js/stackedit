@@ -131,6 +131,7 @@ export default {
    */
   createConverter(options) {
     const converter = new MarkdownIt('zero');
+    converter.use(MarkdownItMultimdTable);
     converter.use(MarkdownItContainer, 'info', {
       validate(params) {
         return params.trim().match(/^info$|^info\s+(.*)$/);
@@ -181,22 +182,6 @@ export default {
         return rule.call(converter.renderer, tokens, idx, opts, env, self);
       };
     });
-    converter.use(MarkdownItMultimdTable, {
-      multiline: false,
-      rowspan: false,
-      headerless: false,
-    });
-    const exampleTable =
-      '|             |          Grouping           || \n' +
-      'First Header  | Second Header | Third Header | \n' +
-      ' ------------ | :-----------: | -----------: | \n' +
-      'Content       |          *Long Cell*        || \n' +
-      'Content       |   **Cell**    |         Cell | \n' +
-      '                                               \n' +
-      'New section   |     More      |         Data | \n' +
-      "And more      | With an escaped '\\|'       || \n" +
-      '[Prototype table]                              \n';
-    console.log(converter.render(exampleTable));
     return converter;
   },
 
