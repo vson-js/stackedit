@@ -11,6 +11,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import hljs from 'highlight.js';
+import 'highlightjs-line-numbers.js';
 import javascript from 'highlight.js/lib/languages/javascript';
 import CommentList from './gutters/CommentList';
 import EditorNewDiscussionButton from './gutters/EditorNewDiscussionButton';
@@ -34,6 +35,8 @@ export default {
     ]),
   },
   mounted() {
+    hljs.initHighlightingOnLoad();
+    hljs.initLineNumbersOnLoad();
     const editorElt = this.$el.querySelector('.editor__inner');
     const onDiscussionEvt = cb => (evt) => {
       let elt = evt.target;
@@ -72,9 +75,6 @@ export default {
         }
       },
     );
-    document.addEventListener('DOMContentLoaded', () => {
-      hljs.highlightBlock(editorElt);
-    });
   },
 };
 </script>
