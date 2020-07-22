@@ -4,6 +4,7 @@ export default {
   namespaced: true,
   state: {
     itemsById: {},
+    userInfo: {},
   },
   mutations: {
     setItem: ({ itemsById }, item) => {
@@ -21,5 +22,11 @@ export default {
       }
       Vue.set(itemsById, item.id, itemToSet);
     },
+    setUserInfo(state, userInfo) {
+      state.userInfo = userInfo;
+    },
+  },
+  getters: {
+    userInfo: state => state.userInfo,
   },
 };

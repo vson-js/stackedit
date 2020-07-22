@@ -55,7 +55,7 @@ export default {
       const userToken = this.$cookies.get('user_token');
       try {
         const userInfo = await axios.get(`${config.baseUrl}${config.api.getUserInfo}/${userToken}`);
-        console.log(userInfo);
+        store.commit('userInfo/setUserInfo', userInfo);
       } catch (e) {
         console.error(e);
       }

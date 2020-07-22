@@ -185,4 +185,5 @@ setInterval(() => {
   store.commit('updateTimeCounter');
 }, 30 * 1000);
 
+window.store = store;
 export default store;
