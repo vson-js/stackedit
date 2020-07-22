@@ -307,8 +307,5 @@ export default {
     addWordpressToken: tokenAdder('wordpress'),
     addZendeskToken: tokenAdder('zendesk'),
     patchBadgeCreations: patcher('badgeCreations'),
-    saveUserInfo:(usrInfo)=>{
-
-    }
   },
 };
