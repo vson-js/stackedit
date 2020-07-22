@@ -42,6 +42,7 @@
     "indexeddbshim": "^3.6.2",
     "js-yaml": "^3.11.0",
     "katex": "^v0.10.2",
+    "highlight.js": "^10.1.1",
     "markdown-it": "^11.0.0",
     "markdown-it-abbr": "^1.0.4",
     "markdown-it-container": "^3.0.0",

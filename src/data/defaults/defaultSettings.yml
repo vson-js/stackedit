@@ -86,10 +86,6 @@ git:
 # Default content for new files
 newFileContent: |
 
-
-
-  > Written with [StackEdit](https://stackedit.io/).
-
 # Default properties for new files
 newFileProperties: |
 #  extensions:
