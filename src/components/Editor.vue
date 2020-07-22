@@ -72,6 +72,9 @@ export default {
         }
       },
     );
+    document.addEventListener('DOMContentLoaded', () => {
+      hljs.highlightBlock(editorElt);
+    });
   },
 };
 </script>

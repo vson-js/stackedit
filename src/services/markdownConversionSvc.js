@@ -2,7 +2,6 @@ import DiffMatchPatch from 'diff-match-patch';
 import Prism from 'prismjs';
 import MarkdownIt from 'markdown-it';
 import MarkdownItContainer from 'markdown-it-container';
-import MarkdownItMultimdTable from 'markdown-it-multimd-table';
 import markdownGrammarSvc from './markdownGrammarSvc';
 import extensionSvc from './extensionSvc';
 import utils from './utils';
@@ -131,7 +130,6 @@ export default {
    */
   createConverter(options) {
     const converter = new MarkdownIt('zero');
-    converter.use(MarkdownItMultimdTable);
     converter.use(MarkdownItContainer, 'info', {
       validate(params) {
         return params.trim().match(/^info$|^info\s+(.*)$/);
