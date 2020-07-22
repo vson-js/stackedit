@@ -1,9 +1,12 @@
 import DiffMatchPatch from 'diff-match-patch';
 import Prism from 'prismjs';
 import MarkdownIt from 'markdown-it';
+import MarkdownItContainer from 'markdown-it-container';
+import MarkdownItMultimdTable from 'markdown-it-multimd-table';
 import markdownGrammarSvc from './markdownGrammarSvc';
 import extensionSvc from './extensionSvc';
 import utils from './utils';
+
 
 const htmlSectionMarker = '\uF111\uF222\uF333\uF444';
 const diffMatchPatch = new DiffMatchPatch();
@@ -127,8 +130,43 @@ export default {
    * @returns {Object} A converter.
    */
   createConverter(options) {
-    // Let the listeners add the rules
     const converter = new MarkdownIt('zero');
+    converter.use(MarkdownItContainer, 'info', {
+      validate(params) {
+        return params.trim().match(/^info$|^info\s+(.*)$/);
+      },
+      render(tokens, idx) {
+        const m = tokens[idx].info.trim().match(/^info\s+(.*)$/);
+        if (tokens[idx].nesting === 1) {
+          return `<div class="info custom-block"><p class="custom-block-title">${converter.utils.escapeHtml(m === null ? '提示' : m[1])}</p>\n`;
+        }
+        return '</div>\n';
+      },
+    });
+    converter.use(MarkdownItContainer, 'warning', {
+      validate(params) {
+        return params.trim().match(/^warning$|^warning$\s+(.*)$/);
+      },
+      render(tokens, idx) {
+        const m = tokens[idx].info.trim().match(/^warning\s+(.*)$/);
+        if (tokens[idx].nesting === 1) {
+          return `<div class="warning custom-block"><p class="custom-block-title">${converter.utils.escapeHtml(m === null ? '警告' : m[1])}</p>\n`;
+        }
+        return '</div>\n';
+      },
+    });
+    converter.use(MarkdownItContainer, 'error', {
+      validate(params) {
+        return params.trim().match(/^error|^error$\s+(.*)$$/);
+      },
+      render(tokens, idx) {
+        const m = tokens[idx].info.trim().match(/^error\s+(.*)$/);
+        if (tokens[idx].nesting === 1) {
+          return `<div class="error custom-block"><p class="custom-block-title">${converter.utils.escapeHtml(m === null ? '错误' : m[1])}</p>\n`;
+        }
+        return '</div>\n';
+      },
+    });
     converter.core.ruler.enable([], true);
     converter.block.ruler.enable([], true);
     converter.inline.ruler.enable([], true);
@@ -143,6 +181,22 @@ export default {
         return rule.call(converter.renderer, tokens, idx, opts, env, self);
       };
     });
+    converter.use(MarkdownItMultimdTable, {
+      multiline: false,
+      rowspan: false,
+      headerless: false,
+    });
+    const exampleTable =
+      '|             |          Grouping           || \n' +
+      'First Header  | Second Header | Third Header | \n' +
+      ' ------------ | :-----------: | -----------: | \n' +
+      'Content       |          *Long Cell*        || \n' +
+      'Content       |   **Cell**    |         Cell | \n' +
+      '                                               \n' +
+      'New section   |     More      |         Data | \n' +
+      "And more      | With an escaped '\\|'       || \n" +
+      '[Prototype table]                              \n';
+    console.log(converter.render(exampleTable));
     return converter;
   },
 
