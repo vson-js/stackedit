@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import '../styles';
 import '../styles/markdownHighlighting.scss';
 import '../styles/app.scss';
@@ -22,6 +23,7 @@ import networkSvc from '../services/networkSvc';
 import tempFileSvc from '../services/tempFileSvc';
 import store from '../store';
 import './common/vueGlobals';
+import config from '../config/index';
 
 const themeClasses = {
   light: ['app--light'],
@@ -49,9 +51,19 @@ export default {
     close() {
       tempFileSvc.close();
     },
+    async getUserInfo() {
+      const userToken = this.$cookies.get('user_token');
+      try {
+        const userInfo = await axios.get(`${config.baseUrl}${config.api.getUserInfo}/${userToken}`);
+        console.log(userInfo);
+      } catch (e) {
+        console.error(e);
+      }
+    },
   },
   async created() {
     try {
+      await this.getUserInfo();
       await syncSvc.init();
       await networkSvc.init();
       this.ready = true;

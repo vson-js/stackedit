@@ -2,6 +2,7 @@ import Vue from 'vue';
 import 'babel-polyfill';
 import 'indexeddbshim/dist/indexeddbshim';
 import * as OfflinePluginRuntime from 'offline-plugin/runtime';
+import VueCookies from 'vue-cookies';
 import './extensions';
 import './services/optional';
 import './icons';
@@ -50,7 +51,7 @@ if (!localStorage.installPrompted) {
 }
 
 Vue.config.productionTip = false;
-
+Vue.use(VueCookies);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
