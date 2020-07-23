@@ -1,5 +1,6 @@
 <template>
   <div class="editor">
+    <div class="editor-numbers"></div>
     <pre class="editor__inner markdown-highlighting" :style="{padding: styles.editorPadding}" :class="{monospaced: computedSettings.editor.monospacedFontOnly}"></pre>
     <div class="gutter" :style="{left: styles.editorGutterLeft + 'px'}">
       <comment-list v-if="styles.editorGutterWidth"></comment-list>
@@ -12,6 +13,7 @@
 import { mapGetters } from 'vuex';
 import CommentList from './gutters/CommentList';
 import EditorNewDiscussionButton from './gutters/EditorNewDiscussionButton';
+import editorSvc from '../services/editorSvc';
 import store from '../store';
 
 export default {
@@ -29,6 +31,36 @@ export default {
     ...mapGetters('data', [
       'computedSettings',
     ]),
+  },
+  data(){
+    return {
+      line:0
+    }
+  },
+  methods:{
+    computeHtml(){
+      setTimeout(() => {
+        const text = editorSvc.clEditor.getContent();
+        this.line=(text.match(new RegExp('\n', 'gm')) || []).length
+      }, 10);
+    },
+    createLineNumber(newValue){
+              const numbers = document.querySelector('.editor-numbers');
+        numbers.innerHTML="";
+        for(let i=1;i<=newValue;i++){
+            numbers.appendChild(document.createTextNode(String(i)));
+            numbers.appendChild(document.createElement('BR'));
+          }
+    }
+  },
+  created(){
+    editorSvc.$on('previewCtx', () => this.computeHtml());
+    editorSvc.$on('previewSelectionRange', () => this.computeHtml());
+  },
+  watch:{
+    line:function(newValue){
+      this.createLineNumber(newValue)
+    }
   },
   mounted() {
     const editorElt = this.$el.querySelector('.editor__inner');
@@ -111,5 +143,17 @@ export default {
       font-size: inherit !important;
     }
   }
+}
+
+.editor-numbers {
+  float: left;
+  width: 2em;
+  padding: 10px 2px;
+  margin-right: 0.5em;
+  text-align: right;
+  font-family: monospace;
+  color: #ccc;
+  font-size: 14px;
+  line-height: 2.2;
 }
 </style>
