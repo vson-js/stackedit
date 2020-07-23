@@ -176,21 +176,21 @@ $corner-size: 110px;
 .custom-block.error,
 .custom-block.info,
 .custom-block.warning {
-  padding: .1rem 1.5rem;
-  border-left-width: .5rem;
+  padding: 0.1rem 1.5rem;
+  border-left-width: 0.5rem;
   border-left-style: solid;
-  margin: .5rem 0;
+  margin: 0.5rem 0;
 }
 
-.custom-block{
+.custom-block {
   .custom-block-title {
     font-weight: 600;
-    margin-bottom: -.4rem;
+    margin-bottom: -0.4rem;
     font-size: 16px;
   }
   p {
     font-size: 16px;
-    margin: .5em 0;
+    margin: 1em 0;
   }
 }
 
@@ -198,13 +198,11 @@ $corner-size: 110px;
   background-color: #f3f5f7;
   border-color: #42b983;
 }
-
 .custom-block.warning {
-  background-color: rgba(255,229,100,.3);
+  background-color: rgba(255,229,100,0.3);
   border-color: #e7c000;
   color: #6b5900;
 }
-
 .custom-block.error {
   background-color: #ffe6e6;
   border-color: #c00;
