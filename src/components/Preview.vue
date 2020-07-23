@@ -191,7 +191,7 @@ $corner-size: 110px;
 
   p {
     font-size: 16px;
-    margin: 1em 0;
+    margin: 0.5em 0;
   }
 }
 
