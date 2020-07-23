@@ -188,6 +188,7 @@ $corner-size: 110px;
     margin-bottom: -0.4rem;
     font-size: 16px;
   }
+
   p {
     font-size: 16px;
     margin: 1em 0;
@@ -198,11 +199,13 @@ $corner-size: 110px;
   background-color: #f3f5f7;
   border-color: #42b983;
 }
+
 .custom-block.warning {
-  background-color: rgba(255,229,100,0.3);
+  background-color: rgba(255, 229, 100, 0.3);
   border-color: #e7c000;
   color: #6b5900;
 }
+
 .custom-block.error {
   background-color: #ffe6e6;
   border-color: #c00;
