@@ -6,7 +6,6 @@ import markdownGrammarSvc from './markdownGrammarSvc';
 import extensionSvc from './extensionSvc';
 import utils from './utils';
 
-
 const htmlSectionMarker = '\uF111\uF222\uF333\uF444';
 const diffMatchPatch = new DiffMatchPatch();
 
@@ -129,7 +128,11 @@ export default {
    * @returns {Object} A converter.
    */
   createConverter(options) {
+    // Let the listeners add the rules
     const converter = new MarkdownIt('zero');
+    converter.core.ruler.enable([], true);
+    converter.block.ruler.enable([], true);
+    converter.inline.ruler.enable([], true);
     converter.use(MarkdownItContainer, 'info', {
       validate(params) {
         return params.trim().match(/^info$|^info\s+(.*)$/);
@@ -166,9 +169,6 @@ export default {
         return '</div>\n';
       },
     });
-    converter.core.ruler.enable([], true);
-    converter.block.ruler.enable([], true);
-    converter.inline.ruler.enable([], true);
     extensionSvc.initConverter(converter, options);
     Object.keys(startSectionBlockTypeMap).forEach((type) => {
       const rule = converter.renderer.rules[type] || converter.renderer.renderToken;
