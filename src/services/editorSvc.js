@@ -492,13 +492,13 @@ const editorSvc = Object.assign(new Vue(), editorSvcDiscussions, editorSvcUtils,
                   imgElt.height = parseInt(match[2], 10);
                 }
               }
-              imgEltsToCache.push(imgElt);
+              // imgEltsToCache.push(imgElt);
             }
-            const imgTokenWrapper = document.createElement('span');
-            imgTokenWrapper.className = 'token img-wrapper';
-            imgTokenElt.parentNode.insertBefore(imgTokenWrapper, imgTokenElt);
-            imgTokenWrapper.appendChild(imgElt);
-            imgTokenWrapper.appendChild(imgTokenElt);
+            // const imgTokenWrapper = document.createElement('span');
+            // imgTokenWrapper.className = 'token img-wrapper';
+            // imgTokenElt.parentNode.insertBefore(imgTokenWrapper, imgTokenElt);
+            // imgTokenWrapper.appendChild(imgElt);
+            // imgTokenWrapper.appendChild(imgTokenElt);
           }
         });
       });
