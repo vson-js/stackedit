@@ -1,12 +1,12 @@
 <template>
-  <modal-inner class="modal__inner-1--settings" aria-label="Settings">
+  <modal-inner aria-label="Insert image">
     <div class="modal__content">
-      <tabble>
+      <table>
         <tr>
           <th>文章标签</th>
           <td>
             <form-entry label="">
-              <input slot="field" class="textfield" type="text">
+              <input slot="field" class="textfield" type="text"/>
             </form-entry>
           </td>
         </tr>
@@ -14,7 +14,9 @@
           <th>系统分类</th>
           <td>
             <form-entry label="">
-              <input slot="field" class="textfield" type="text">
+              <select slot="field" class="textfield" type="text">
+                <option>web前端</option>
+              </select>
             </form-entry>
           </td>
         </tr>
@@ -22,114 +24,97 @@
           <th>个人分类</th>
           <td>
             <form-entry label="">
-              <input slot="field" class="textfield" type="text">
+              <select slot="field" class="textfield" type="text">
+                <option>web前端</option>
+              </select>
             </form-entry>
           </td>
         </tr>
         <tr>
-          <th>文章类型</th>
+          <th>文章分类</th>
           <td>
-            <form-entry label="">
-              <input slot="field" class="textfield" type="text">
-            </form-entry>
+            <div>
+              <input  name="atype" id="atype_1" type="radio" /><label for="atype_1">原创</label>
+              <input  name="atype" id="atype_2" type="radio" /><label for="atype_2">转载</label>
+              <input  name="atype" id="atype_3" type="radio" /><label for="atype_3">翻译</label>
+            </div>
           </td>
         </tr>
         <tr>
           <th>阅读权限</th>
           <td>
-            <form-entry label="">
-              <input slot="field" class="textfield" type="text">
-            </form-entry>
+            <div>
+              <input  name="rtype" id="rtype_1" type="radio" /><label for="rtype_1">公开</label>
+              <input  name="rtype" id="rtype_2" type="radio" /><label for="rtype_2">粉丝可见</label>
+              <input  name="rtype" id="rtype_3" type="radio" /><label for="rtype_3">付费可见</label>
+              <input  name="rtype" id="rtype_4" type="radio" /><label for="rtype_4">私密</label>
+            </div>
           </td>
         </tr>
-      </tabble>
+
+      </table>
     </div>
     <div class="modal__button-bar">
-      <button class="button" @click="config.reject()">Cancel</button>
-      <button class="button button--resolve" @click="resolve">Ok</button>
+      <button class="button" @click="reject()">保存草稿</button>
+      <button class="button button--resolve" @click="resolve">发送</button>
     </div>
   </modal-inner>
 </template>
 
 <script>
-  import yaml from 'js-yaml';
-  import { mapGetters } from 'vuex';
-  import ModalInner from './common/ModalInner';
-  import Tab from './common/Tab';
-  import CodeEditor from '../CodeEditor';
-  import defaultSettings from '../../data/defaults/defaultSettings.yml';
+  import modalTemplate from './common/modalTemplate';
+  import MenuEntry from '../menus/common/MenuEntry';
+  import googleHelper from '../../services/providers/helpers/googleHelper';
   import store from '../../store';
-  import badgeSvc from '../../services/badgeSvc';
 
-  const emptySettings = `# Add your custom settings here to override the
-# default settings.
-`;
-
-  export default {
+  export default modalTemplate({
     components: {
-      ModalInner,
-      Tab,
-      CodeEditor,
+      MenuEntry,
     },
     data: () => ({
-      defaultSettings,
-      customSettings: null,
+      url: '',
     }),
     computed: {
-      ...mapGetters('modal', [
-        'config',
-      ]),
-      strippedCustomSettings() {
-        return this.customSettings === emptySettings ? '\n' : this.customSettings.replace(/\t/g, '  ');
+      googlePhotosTokens() {
+        const googleTokensBySub = store.getters['data/googleTokensBySub'];
+        return Object.values(googleTokensBySub)
+          .filter(token => token.isPhotos)
+          .sort((token1, token2) => token1.name.localeCompare(token2.name));
       },
-    },
-    created() {
-      const settings = store.getters['data/settings'];
-      this.setCustomSettings(settings === '\n' ? emptySettings : settings);
     },
     methods: {
-      setCustomSettings(value) {
-        this.customSettings = value;
-        try {
-          yaml.safeLoad(this.strippedCustomSettings);
-          this.error = null;
-        } catch (e) {
-          this.error = e.message;
+      resolve(evt) {
+        evt.preventDefault(); // Fixes https://github.com/benweet/stackedit/issues/1503
+        if (!this.url) {
+          this.setError('url');
+        } else {
+          const { callback } = this.config;
+          this.config.resolve();
+          callback(this.url);
         }
       },
-      async resolve() {
-        if (!this.error) {
-          const settings = this.strippedCustomSettings;
-          await store.dispatch('data/setSettings', settings);
-          const customSettings = yaml.safeLoad(settings);
-          if (customSettings.shortcuts) {
-            badgeSvc.addBadge('changeShortcuts');
-          }
-          const computedSettings = store.getters['data/computedSettings'];
-          const customSettingsCount = Object
-            .keys(customSettings)
-            .filter(key => key !== 'shortcuts' && computedSettings[key])
-            .length;
-          if (customSettingsCount) {
-            badgeSvc.addBadge('changeSettings');
-          }
-          this.config.resolve(settings);
+      reject() {
+        const { callback } = this.config;
+        this.config.reject();
+        callback(null);
+      },
+      async addGooglePhotosAccount() {
+        try {
+          await googleHelper.addPhotosAccount();
+        } catch (e) { /* cancel */ }
+      },
+      async openGooglePhotos(token) {
+        const { callback } = this.config;
+        this.config.reject();
+        const res = await googleHelper.openPicker(token, 'img');
+        if (res[0]) {
+          store.dispatch('modal/open', {
+            type: 'googlePhoto',
+            url: res[0].url,
+            callback,
+          });
         }
       },
     },
-  };
+  });
 </script>
-
-<style lang="scss">
-  @import '../../styles/variables.scss';
-
-  .modal__inner-1.modal__inner-1--settings {
-    max-width: 560px;
-  }
-
-  .modal__error--settings {
-    white-space: pre-wrap;
-    font-family: $font-family-monospace;
-    font-size: $font-size-monospace;
-  }
-</style>
