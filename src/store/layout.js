@@ -91,6 +91,7 @@ function computeStyles(state, getters, layoutSettings = getters['data/layoutSett
   if (doublePanelWidth < 1120) {
     styles.fontSize -= 1;
     styles.textWidth = 910;
+    styles.numberLineHeight = 2;
   }
   if (doublePanelWidth < 1040) {
     styles.textWidth = 830;
@@ -101,6 +102,7 @@ function computeStyles(state, getters, layoutSettings = getters['data/layoutSett
   }
   if (styles.textWidth < 640) {
     styles.fontSize -= 1;
+    styles.numberLineHeight = 1.9;
   }
   styles.fontSize *= computedSettings.fontSizeFactor;
 

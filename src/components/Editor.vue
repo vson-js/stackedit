@@ -1,6 +1,6 @@
 <template>
   <div class="editor">
-    <div class="editor-numbers"></div>
+    <div class="editor-numbers" :style="{lineHeight: styles.numberLineHeight}"></div>
     <pre class="editor__inner markdown-highlighting" :style="{padding: styles.editorPadding}" :class="{monospaced: computedSettings.editor.monospacedFontOnly}"></pre>
     <div class="gutter" :style="{left: styles.editorGutterLeft + 'px'}">
       <comment-list v-if="styles.editorGutterWidth"></comment-list>
@@ -155,8 +155,5 @@ export default {
   color: #ccc;
   font-size: 14px;
   line-height: 2.2;
-}
-@media only screen and(max-width: 300px) {
-  line-height: 1.92;
 }
 </style>
