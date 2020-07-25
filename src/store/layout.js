@@ -87,6 +87,7 @@ function computeStyles(state, getters, layoutSettings = getters['data/layoutSett
   const computedSettings = getters['data/computedSettings'];
   styles.fontSize = 18;
   styles.textWidth = 990;
+  styles.numberLineHeight = 2.2;
   if (doublePanelWidth < 1120) {
     styles.fontSize -= 1;
     styles.textWidth = 910;

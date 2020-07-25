@@ -156,4 +156,7 @@ export default {
   font-size: 14px;
   line-height: 2.2;
 }
+@media only screen and(max-width: 300px) {
+  line-height: 1.92;
+}
 </style>
