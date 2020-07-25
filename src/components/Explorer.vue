@@ -14,6 +14,9 @@
         <button class="side-title__button side-title__button--rename button" @click="editItem()" v-title="'Rename'">
           <icon-pen></icon-pen>
         </button>
+        <button class="side-title__button side-title__button--save button" @click="saveItem()" v-title="'保存'">
+          <icon-contentSave></icon-contentSave>
+        </button>
       </div>
       <button class="side-title__button side-title__button--close button" @click="toggleExplorer(false)" v-title="'Close explorer'">
         <icon-close></icon-close>
@@ -57,6 +60,12 @@ export default {
       const node = this.selectedNode;
       if (!node.isTrash && !node.isTemp) {
         store.commit('explorer/setEditingId', node.item.id);
+      }
+    },
+    saveItem() {
+      const node = this.selectedNode;
+      if (!node.isTrash && !node.isTemp) {
+        store.dispatch('modal/open', 'save');
       }
     },
   },

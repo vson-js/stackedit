@@ -39,6 +39,7 @@ import WorkspaceManagementModal from './modals/WorkspaceManagementModal';
 import AccountManagementModal from './modals/AccountManagementModal';
 import BadgeManagementModal from './modals/BadgeManagementModal';
 import SponsorModal from './modals/SponsorModal';
+import SaveModal from './modals/SaveModal';
 
 // Providers
 import GooglePhotoModal from './modals/providers/GooglePhotoModal';
@@ -119,6 +120,7 @@ export default {
     ZendeskPublishModal,
     CouchdbWorkspaceModal,
     CouchdbCredentialsModal,
+    SaveModal,
   },
   computed: {
     ...mapGetters([
